@@ -84,9 +84,6 @@ function Login(props) {
         </button>
       </form>
       <div className='login-links'>
-        <Link to='/password' className='login-forgot-password'>
-          Forgot your password?
-        </Link>
         <Link to='/signup' className='login-signup'>
           Sign Up
         </Link>

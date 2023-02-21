@@ -18,26 +18,28 @@ export interface PlanetData {
   id: string;
 }
 
-const ITEMS_PER_PAGE = 5;
-
 function PlanetsTable() {
   const [planets, setPlanets] = useState<PlanetData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState(new Map<string, string>);
+  const [perPage, setPerPage] = useState(5);
+  const [newPerPage, setNewPerPage] = useState(5);
   const navigate = useNavigate();
 
-  
   async function fetchPlanetData() {
     setLoading(true);
     let filterString = Array.from(filter).map(([key, value]) => `${key}=${value}`).join('&').replace(new RegExp(' ', 'g'), '%20')
+    filterString = filterString+'&page='+currentPage+'&pageCount='+perPage
     const url = 'http://localhost:8000/planets?'+filterString;
     const response = await fetch(url);
 
-    const results = await response.json();
+    const data = await response.json();
+    setTotalPages(data.total_pages)
+    const results = data.planets; 
 
-    for (let i = (currentPage-1)*ITEMS_PER_PAGE; i < ((currentPage-1)*ITEMS_PER_PAGE)+results.length && i < (currentPage)*ITEMS_PER_PAGE; i++) {
+    for (let i = 0; i < +results.length && i < perPage; i++) {
       const planet = results[i];
       const films = await Promise.all(planet.films.map((film) => fetchAndExtractDetails('film/'+film.id)));
 
@@ -46,15 +48,13 @@ function PlanetsTable() {
         films,
       };
     }
-    const totalPages = Math.ceil( results.length / ITEMS_PER_PAGE);
     setLoading(false);
-    setTotalPages(totalPages);
     setPlanets(results);
   }
 
   useEffect(() => {
     fetchPlanetData();
-  }, [currentPage]);
+  }, [currentPage, perPage]);
 
   function handleRefClick(url: string, type: string) {
     const apiUrl = type+'/'+url
@@ -71,7 +71,6 @@ function PlanetsTable() {
   function handleFilterChange(key: string, value: string) {
     const emptyStringRegex = /^\s*$/;
     if (emptyStringRegex.test(value)) {
-      console.log(filter.has(key))
       if (filter.has(key)) {
         filter.delete(key)
       } else {
@@ -90,6 +89,17 @@ function PlanetsTable() {
 
   return (
     <div>
+      <div className="per-page">
+        <label htmlFor="per-page-input">Per Page:</label>
+        <input
+          type="number"
+          defaultValue={perPage}
+          onChange={(e) => {setNewPerPage(parseInt(e.target.value))}}
+          onKeyDown={handleKeyDown}
+          min="1"
+        />
+        <button onClick={(e) => {setPerPage(newPerPage)}}>Submit</button>
+      </div>
         <table>
         <thead> 
           <tr>
@@ -140,7 +150,7 @@ function PlanetsTable() {
             </tr>
         </thead>
         <tbody>
-            {planets.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((planet) => (
+            {planets.map((planet) => (
             <tr key={planet.name}>
                 <td>
                 <td onClick={() => handleRefClick(planet.id, 'planet')} className='table-main-title'>{planet.name}</td>

@@ -1,18 +1,26 @@
-# Getting Started with Create React App
+# Factored Frontend assessment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the frontend assessment for the Factored hiring process.
 
-## Available Scripts
+It consumes the API created in the backend assessment, for the entities User, Film, Planet, and Person. It comes with a small video game in which you click to shoot and try to avoid/destroy meteors on the main page.
 
-In the project directory, you can run:
+furthermore, this visualization comes with the Details view, which can navigate to others example Luke Skywalker detail => Tatooine detail
+The 3 general views can be accessed from the main page, and can also be filtered by every field. These tables are paginated, both in front and backend. which means no unnecessary API calls.
+The sign-in and login function with a mock auth token. which enables interactions with the rest of the web app
 
+It also includes 404 error page, and greetings to non-authed users, redirecting them to the login/sign-in pages.
+
+# running the proyect
+### `npm install`
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the app in development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Future improvements
 
-### `npm test`
-
+- Theme consistency
+- Password retrieval
+- User expansion, profile picture, username, high score etc
+- sorting functions
+- secure-auth handling

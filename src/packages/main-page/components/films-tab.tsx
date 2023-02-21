@@ -16,24 +16,28 @@ export interface FilmData {
   id: string;
 }
 
-const ITEMS_PER_PAGE = 2;
-
 function FilmsTable() {
   const [films, setFilms] = useState<FilmData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState(new Map<string, string>);
+  const [perPage, setPerPage] = useState(2);
+  const [newPerPage, setNewPerPage] = useState(2);
   const navigate = useNavigate();
 
   async function fetchFilmData() {
     setLoading(true); 
     let filterString = Array.from(filter).map(([key, value]) => `${key}=${value}`).join('&').replace(new RegExp(' ', 'g'), '%20')
+    filterString = filterString+'&page='+currentPage+'&pageCount='+perPage
     const url = 'http://localhost:8000/films?'+filterString;
     const response = await fetch(url);
-    const results = await response.json();
 
-    for (let i = (currentPage-1)*ITEMS_PER_PAGE; i < ((currentPage-1)*ITEMS_PER_PAGE)+results.length && i < (currentPage)*ITEMS_PER_PAGE; i++) {
+    const data = await response.json();
+    setTotalPages(data.total_pages)
+    const results = data.films; 
+
+    for (let i = 0; i < +results.length && i < perPage; i++) {
       const film = results[i];
       const release_date = formatDate(film.release_date);
       const characters = await Promise.all(film.people.map((person) => fetchAndExtractDetails('person/'+person.id)));
@@ -46,15 +50,13 @@ function FilmsTable() {
         planets,
       };
     }
-    const totalPages = Math.ceil( results.length / ITEMS_PER_PAGE);
     setLoading(false);
-    setTotalPages(totalPages);
     setFilms(results);
   }
 
   useEffect(() => {
     fetchFilmData();
-  }, [currentPage]);
+  }, [currentPage, perPage]);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -65,7 +67,6 @@ function FilmsTable() {
   function handleFilterChange(key: string, value: string) {
     const emptyStringRegex = /^\s*$/;
     if (emptyStringRegex.test(value)) {
-      console.log(filter.has(key))
       if (filter.has(key)) {
         filter.delete(key)
       } else {
@@ -88,6 +89,17 @@ function FilmsTable() {
 
   return (
     <div>
+      <div className="per-page">
+        <label htmlFor="per-page-input">Per Page:</label>
+        <input
+          type="number"
+          defaultValue={perPage}
+          onChange={(e) => {setNewPerPage(parseInt(e.target.value))}}
+          onKeyDown={handleKeyDown}
+          min="1"
+        />
+        <button onClick={(e) => {setPerPage(newPerPage)}}>Submit</button>
+      </div>
         <table>
         <thead> 
           <tr>
@@ -130,7 +142,7 @@ function FilmsTable() {
             </tr>
         </thead>
         <tbody>
-            {films.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((film) => (
+            {films.map((film) => (
             <tr key={film.title}>
                 <td>
                 <td onClick={() => handleRefClick(film.id, 'film')} className='table-main-title'>{film.title}</td>

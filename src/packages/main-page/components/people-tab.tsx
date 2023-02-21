@@ -18,25 +18,31 @@ export interface CharacterData {
   id: string;
 }
 
-const ITEMS_PER_PAGE = 4;
-
 function PeopleTable() {
   const [characters, setCharacters] = useState<CharacterData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState(new Map<string, string>);
+  const [perPage, setPerPage] = useState(4);
+  const [newPerPage, setNewPerPage] = useState(4);
   const navigate = useNavigate();
 
   async function fetchCharacterData() {
+    console.log('PRINT')
     setLoading(true);
     let filterString = Array.from(filter).map(([key, value]) => `${key}=${value}`).join('&').replace(new RegExp(' ', 'g'), '%20')
+    filterString = filterString+'&page='+currentPage+'&pageCount='+perPage
     const url = 'http://localhost:8000/people?'+filterString; 
     console.log(url);
-    const response = await fetch(url)
-    const results = await response.json();
+    const response = await fetch(url) 
+    console.log(response);
+    const data = await response.json();
+    setTotalPages(data.total_pages)
+    const results = data.people; 
+    console.log(results)
 
-    for (let i = (currentPage-1)*ITEMS_PER_PAGE; i < ((currentPage-1)*ITEMS_PER_PAGE)+results.length && i < (currentPage)*ITEMS_PER_PAGE; i++) {
+    for (let i = 0; i < +results.length && i < perPage; i++) {
       const character = results[i];
       const homeworld = await fetchAndExtractDetails('planet/'+character.planet_id);
       const films = await Promise.all(character.films.map((film) => fetchAndExtractDetails('film/'+film.id)));
@@ -47,15 +53,13 @@ function PeopleTable() {
         homeworld,
       };
     }
-    const totalPages = Math.ceil( results.length / ITEMS_PER_PAGE);
     setLoading(false);
-    setTotalPages(totalPages);
     setCharacters(results);
   }
 
   useEffect(() => {
     fetchCharacterData();
-  }, [currentPage]);
+  }, [currentPage, perPage]);
 
   function handleRefClick(url: string, type: string) {
     const apiUrl = type+'/'+url
@@ -71,7 +75,6 @@ function PeopleTable() {
   function handleFilterChange(key: string, value: string) {
     const emptyStringRegex = /^\s*$/;
     if (emptyStringRegex.test(value)) {
-      console.log(filter.has(key))
       if (filter.has(key)) {
         filter.delete(key)
       } else {
@@ -90,6 +93,17 @@ function PeopleTable() {
 
   return (
     <div>
+      <div className="per-page">
+        <label htmlFor="per-page-input">Per Page:</label>
+        <input
+          type="number"
+          defaultValue={perPage}
+          onChange={(e) => {setNewPerPage(parseInt(e.target.value))}}
+          onKeyDown={handleKeyDown}
+          min="1"
+        />
+        <button onClick={(e) => {setPerPage(newPerPage)}}>Submit</button>
+      </div>
       <table>
         <thead> 
           <tr>
@@ -140,7 +154,7 @@ function PeopleTable() {
             </tr>
         </thead>
         <tbody>
-            {characters.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((character) => (
+            {characters.map((character) => (
             <tr key={character.name}>
                 <td>
                 <td onClick={() => handleRefClick(character.id, 'person')} className='table-main-title'>{character.name}</td>
@@ -165,9 +179,9 @@ function PeopleTable() {
         </tbody>
         </table>
         <div className="pagination">
-            <button onClick={() => {setCurrentPage(currentPage - 1); setLoading(true)}} disabled={currentPage === 1}>Prev</button>
+            <button onClick={() => {setCurrentPage(currentPage - 1)}} disabled={currentPage === 1}>Prev</button>
                 <span>{currentPage} of {totalPages}</span>
-            <button onClick={() => {setCurrentPage(currentPage + 1); setLoading(true)}} disabled={currentPage === totalPages}>Next</button>
+            <button onClick={() => {setCurrentPage(currentPage + 1)}} disabled={currentPage === totalPages}>Next</button>
         </div>
     </div>
   );

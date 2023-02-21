@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './profile-edit.scss';
 
-function ProfileEdit() {
+function ProfileEdit(props) {
+  const { onLogout } = props
   const navigate = useNavigate();
   const token = localStorage.getItem("auth_token");
   const [email, setEmail] = useState("");
@@ -43,6 +44,7 @@ function ProfileEdit() {
         .then((response) => response.json())
         .then((data) => {
           localStorage.removeItem('auth_token');
+          onLogout(false); 
           navigate('/');
         })
         .catch((error) => {
@@ -53,7 +55,8 @@ function ProfileEdit() {
 
   const handleLogoutClick = () => {
     localStorage.removeItem("auth_token");
-    navigate('/exit');
+    onLogout(false); 
+    navigate('/');
   };
 
   const handleChangePasswordClick = () => {
@@ -93,10 +96,6 @@ function ProfileEdit() {
             value={email}
             onChange={(e) => {setEmail(e.target.value)}}
             />
-        </div>
-        <div>
-            <label htmlFor="password">Password:</label>
-            <button type="button" onClick={handleChangePasswordClick}>Change Password</button>
         </div>
         <button type="submit">Save Changes</button>
         <button type="button" onClick={handleDeleteClick}>

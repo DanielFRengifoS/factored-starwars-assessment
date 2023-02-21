@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './signup-panel.scss';
 import blaster from '../../misc/resources/blaster.wav';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function SignupPanel(props) {
   
@@ -111,6 +111,9 @@ function SignupPanel(props) {
           Sign In
         </button>
       </form>
+      <Link to='/login' className='login-signup'>
+        Log In
+      </Link>
     </div>
   );
 }

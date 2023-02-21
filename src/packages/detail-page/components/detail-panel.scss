@@ -47,4 +47,23 @@
         }
       }
     }
+    
+    button {
+      border: 2px solid #ffe81f;
+      border-radius: 4px;
+      padding: 0.5rem;
+      background-color: #ffe81f;
+      color: #000;
+      font-weight: 500;
+      
+      &:hover {
+        background-color: #d23c2a;
+        border-color: #d23c2a;
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
   }

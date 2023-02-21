@@ -23,7 +23,8 @@ export async function fetchAndExtractDetails(url: string): Promise<ReferenceData
   return { title: data.title, id: data.id, name: data.name };
 }
 
-function MainPage() {
+function MainPage(props) {
+  const { onAuth } = props; 
   const [currentComponent, setCurrentComponent] = useState("home");
 
   const handleNavigationClick = (component) => {
@@ -36,7 +37,7 @@ function MainPage() {
       componentToRender = <StarWars />;
       break;
     case "profile":
-      componentToRender = <ProfileEdit />;
+      componentToRender = <ProfileEdit onLogout={onAuth}/>;
       break;
     case "people":
       componentToRender = <PeopleTable />;

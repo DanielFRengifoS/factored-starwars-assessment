@@ -1,50 +1,72 @@
 .form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: "Star Jedi", sans-serif;
-    color: #fff;
-    background: linear-gradient(180deg, #000, #1c1c1c);
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 0 1rem #fff;
-    max-width: 50rem;
-    margin: 0 auto;
-  
-    label {
-      margin-bottom: 1rem;
-    }
-  
-    input {
-      padding: 0.5rem;
-      border: none;
-      border-radius: 0.5rem;
-      margin-bottom: 1rem;
-    }
-  
-    button {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 0.5rem;
-      margin-top: 1rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-  
-      &:hover {
-        background-color: #ffd700;
-        color: #000;
-      }
-  
-      &:first-of-type {
-        background-color: #0080ff;
-      }
-  
-      &:nth-of-type(2) {
-        background-color: #ff3333;
-      }
-  
-      &:last-of-type {
-        background-color: #32cd32;
-      }
-    }
-  }
+  background-color: #000;
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+label {
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+input[type="email"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #111;
+  color: #fff;
+  font-size: 16px;
+  margin-right: 10px;
+  width: 300px;
+}
+
+button[type="submit"], button[type="button"] {
+  background-color: #ffd700;
+  color: #000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover, button[type="button"]:hover {
+  background-color: #f5f5f5;
+  color: #000;
+}
+
+button[type="submit"]:active, button[type="button"]:active {
+  transform: translateY(1px);
+}
+
+button[type="submit"] {
+  background-color: #32cd32;
+}
+
+button[type="button"] {
+  background-color: #ff0000;
+}
+
+.form-container:before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 10px solid transparent;
+  border-bottom-color: #ffd700;
+}
+
+.form-container:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 10px solid transparent;
+  border-top-color: #ffd700;
+}

@@ -35,7 +35,7 @@ function App() {
     <Router>  
       <div className="App">   
         <Routes>  
-          <Route path="/main" element={<MainPage/>} />
+          <Route path="/main" element={<MainPage onAuth={setIsAuthenticated}/>} />
           <Route exact path='/login' element={<LoginPanel onSuccess={() => {setIsAuthenticated(true)}}/>} />
           <Route exact path='/signup' element={<SignupPanel onSuccess={() => {setIsAuthenticated(true)}}/>} />
           <Route path="/detail" element={<DetailPanel/>} />

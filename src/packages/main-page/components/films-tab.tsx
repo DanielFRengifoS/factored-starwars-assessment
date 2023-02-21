@@ -28,7 +28,7 @@ function FilmsTable() {
   async function fetchFilmData() {
     setLoading(true); 
     let filterString = Array.from(filter).map(([key, value]) => `${key}=${value}`).join('&').replace(new RegExp(' ', 'g'), '%20')
-    const url = 'http://localhost:5432/films?'+filterString;
+    const url = 'http://localhost:8000/films?'+filterString;
     const response = await fetch(url);
     const results = await response.json();
 

@@ -29,7 +29,7 @@ function Login(props) {
     event.preventDefault(); 
     setIsLoading(true);
     const user = { email: email, password: password };
-    const response = await fetch('http://localhost:5432/user', {
+    const response = await fetch('http://localhost:8000/user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

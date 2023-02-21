@@ -26,7 +26,7 @@ function DetailsPanel() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const response = await fetch('http://localhost:5432/'+state.apiUrl);
+      const response = await fetch('http://localhost:8000/'+state.apiUrl);
       let json = await response.json();
       
       if (type === 'films') {

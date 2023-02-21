@@ -31,7 +31,7 @@ function PlanetsTable() {
   async function fetchPlanetData() {
     setLoading(true);
     let filterString = Array.from(filter).map(([key, value]) => `${key}=${value}`).join('&').replace(new RegExp(' ', 'g'), '%20')
-    const url = 'http://localhost:5432/planets?'+filterString;
+    const url = 'http://localhost:8000/planets?'+filterString;
     const response = await fetch(url);
 
     const results = await response.json();

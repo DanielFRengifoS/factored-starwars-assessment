@@ -11,7 +11,7 @@ function ProfileEdit() {
     async function fetchData() {
         if (token) {
             const encodedEmail = encodeURIComponent(token).replace(/\./g, "%2E");
-            const url = `http://localhost:5432/user/${encodedEmail}`;
+            const url = `http://localhost:8000/user/${encodedEmail}`;
             fetch(url, {
                 headers: {
                 'Content-Type': 'application/json'
@@ -33,7 +33,7 @@ function ProfileEdit() {
   const handleDeleteClick = () => {
     const user = { email: token };
     if (token) {
-      fetch("http://localhost:5432/user", {
+      fetch("http://localhost:8000/user", {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json'
@@ -63,7 +63,7 @@ function ProfileEdit() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const user = { email: token, new_email: email }
-    fetch('http://localhost:5432/user', {
+    fetch('http://localhost:8000/user', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

@@ -46,7 +46,7 @@ function SignupPanel(props) {
       const audio = new Audio(blaster);
       audio.play();
       const user = { email: email, password: password };
-      await fetch('http://localhost:5432/users', {
+      await fetch('http://localhost:8000/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

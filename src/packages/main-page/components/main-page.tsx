@@ -18,7 +18,7 @@ export function formatDate(date: string): string {
 }
 
 export async function fetchAndExtractDetails(url: string): Promise<ReferenceData> {
-  const response = await fetch('http://localhost:5432/'+url);
+  const response = await fetch('http://localhost:8000/'+url);
   const data = await response.json();
   return { title: data.title, id: data.id, name: data.name };
 }

@@ -30,7 +30,7 @@ function PeopleTable() {
   async function fetchCharacterData() {
     setLoading(true);
     let filterString = Array.from(filter).map(([key, value]) => `${key}=${value}`).join('&').replace(new RegExp(' ', 'g'), '%20')
-    const url = 'http://localhost:5432/people?'+filterString; 
+    const url = 'http://localhost:8000/people?'+filterString; 
     console.log(url);
     const response = await fetch(url)
     const results = await response.json();

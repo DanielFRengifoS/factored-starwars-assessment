@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../misc/components/loading-component.tsx';
 import { fetchAndExtractDetails, ReferenceData, formatDate  } from './main-page.tsx';
 import './table-tab.scss'
 
@@ -84,7 +85,7 @@ function PlanetsTable() {
   }
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading/>;
   }
 
   return (

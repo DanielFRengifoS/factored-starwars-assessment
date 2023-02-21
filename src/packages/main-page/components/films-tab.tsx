@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../misc/components/loading-component.tsx';
 import { fetchAndExtractDetails, ReferenceData, formatDate } from './main-page.tsx';
 import './table-tab.scss'
 
@@ -34,13 +35,13 @@ function FilmsTable() {
 
     for (let i = (currentPage-1)*ITEMS_PER_PAGE; i < ((currentPage-1)*ITEMS_PER_PAGE)+results.length && i < (currentPage)*ITEMS_PER_PAGE; i++) {
       const film = results[i];
-      const release = formatDate(film.release_date);
+      const release_date = formatDate(film.release_date);
       const characters = await Promise.all(film.people.map((person) => fetchAndExtractDetails('person/'+person.id)));
       const planets = await Promise.all(film.planets.map((planet) => fetchAndExtractDetails('planet/'+planet.id)));
 
       results[i] = {
         ...film,
-        release,
+        release_date,
         characters,
         planets,
       };
@@ -82,7 +83,7 @@ function FilmsTable() {
   }
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading/>;
   }
 
   return (

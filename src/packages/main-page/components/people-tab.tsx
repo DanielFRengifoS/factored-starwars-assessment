@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchAndExtractDetails, ReferenceData, formatDate } from './main-page.tsx';
+import Loading from '../../misc/components/loading-component.tsx';
+import { fetchAndExtractDetails, ReferenceData } from './main-page.tsx';
 import './table-tab.scss'
 
 export interface CharacterData {
@@ -84,7 +85,7 @@ function PeopleTable() {
   }
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading/>;
   }
 
   return (

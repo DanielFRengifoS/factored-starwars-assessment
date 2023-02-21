@@ -1,0 +1,50 @@
+.details-panel {
+    background-color: #000;
+    color: #fff;
+    padding: 2rem;
+  
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+    }
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+  
+      tr {
+        border-bottom: 1px solid #fff;
+  
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+  
+      td {
+        padding: 1rem;
+        text-align: left;
+        vertical-align: top;
+  
+        &.table-main-title {
+          font-weight: bold;
+        }
+  
+        &.table-sub-link {
+          color: #fff;
+          text-decoration: underline;
+          cursor: pointer;
+  
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+  
+      tbody {
+        tr:nth-child(even) {
+          background-color: #333;
+        }
+      }
+    }
+  }
